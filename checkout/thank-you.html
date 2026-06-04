@@ -1332,6 +1332,11 @@
           // UTMIFY WEBHOOK — Registra a venda aprovada via API server-side
           // ═══════════════════════════════════════════════════════════════
           const utmParams = new URLSearchParams(window.location.search);
+          const purchaseProduct = urlParams.get('product') || urlParams.get('productName') || urlParams.get('product_name') || 'DeWalt Brushless Twin Kit';
+          const purchaseProductId = urlParams.get('productId') || urlParams.get('product_id') || purchaseProduct.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+          const purchasePlanId = urlParams.get('planId') || urlParams.get('plan_id') || urlParams.get('plan') || 'plan-' + purchaseProductId;
+          const purchasePlanName = urlParams.get('planName') || urlParams.get('plan_name') || purchaseProduct;
+
           const webhookPayload = {
               orderId: orderId,
               status: 'approved',
@@ -1341,8 +1346,10 @@
               price: parseFloat(purchasePrice) || 69.95,
               priceInCents: Math.round((parseFloat(purchasePrice) || 69.95) * 100),
               currency: purchaseCurrency || 'GBP',
-              productId: 'dewalt-brushless-twin-kit',
-              productName: 'DeWalt Brushless Twin Kit',
+              productId: purchaseProductId,
+              productName: purchaseProduct,
+              planId: purchasePlanId,
+              planName: purchasePlanName,
               quantity: 1,
               paymentMethod: 'credit_card',
               installments: 1,
