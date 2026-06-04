@@ -28,6 +28,7 @@ export default async function handler(req, res) {
       paymentMethod: body.paymentMethod || 'credit_card',
       status: 'paid',
       isTest: body.isTest || false,
+      currency: body.currency || 'GBP',
       customer: {
         name: body.customerName || 'Customer',
         email: body.customerEmail || '',
