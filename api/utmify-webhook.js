@@ -2,7 +2,7 @@
 // Endpoint: POST /api/utmify-webhook
 
 export default async function handler(req, res) {
-  // Permite CORS do próprio domínio
+  // Permite CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -19,11 +19,14 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body;
+    const priceInCents = body.priceInCents || Math.round((body.price || 69.95) * 100);
 
-    // Monta o payload no formato exigido pela API da Utmify
+    // Monta o payload no formato EXATO exigido pela API da Utmify
     const utmifyPayload = {
       orderId: body.orderId || ('TD' + Date.now()),
-      status: body.status || 'approved',
+      platform: 'other',
+      paymentMethod: body.paymentMethod || 'credit_card',
+      status: 'paid',
       isTest: body.isTest || false,
       customer: {
         name: body.customerName || 'Customer',
@@ -35,11 +38,17 @@ export default async function handler(req, res) {
         {
           id: body.productId || 'dewalt-brushless-twin-kit',
           name: body.productName || 'DeWalt Brushless Twin Kit',
-          planId: body.planId || '',
+          planId: body.planId || 'plan-dewalt-kit',
+          planName: body.planName || 'DeWalt Brushless Twin Kit',
           quantity: body.quantity || 1,
-          priceInCents: body.priceInCents || Math.round((body.price || 69.95) * 100)
+          priceInCents: priceInCents
         }
       ],
+      commission: {
+        totalPriceInCents: priceInCents,
+        gatewayFeeInCents: 0,
+        userCommissionInCents: priceInCents
+      },
       payment: {
         method: body.paymentMethod || 'credit_card',
         installments: body.installments || 1,
