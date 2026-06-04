@@ -48,7 +48,8 @@ export default async function handler(req, res) {
       commission: {
         totalPriceInCents: priceInCents,
         gatewayFeeInCents: 0,
-        userCommissionInCents: priceInCents
+        userCommissionInCents: priceInCents,
+        currency: body.currency || 'GBP'
       },
       payment: {
         method: body.paymentMethod || 'credit_card',
