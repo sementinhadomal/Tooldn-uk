@@ -42,7 +42,6 @@
   ></script>
   <script src="../js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
 
-  <script async defer src="https://js.whop.com/static/checkout/loader.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -573,6 +572,13 @@
       if (totalEl)    totalEl.textContent     = formatted;
       if (toggleRight) toggleRight.textContent = formatted;
     }
+
+    // Now dynamically load the Whop script after DOM cleanup is complete
+    var whopScript = document.createElement('script');
+    whopScript.src = "https://js.whop.com/static/checkout/loader.js";
+    whopScript.async = true;
+    whopScript.defer = true;
+    document.head.appendChild(whopScript);
   })();
 </script>
 
