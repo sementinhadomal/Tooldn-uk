@@ -42,6 +42,47 @@
   ></script>
   <script src="../js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
 
+  <!-- ══ Resolve Plan ID & Redirect URL synchronously BEFORE Whop loads ══ -->
+  <script>
+    var resolvedPlanId = 'plan_eJpThCdnLQvGY'; // Default plan ID
+    var resolvedReturnUrl = '';
+
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var planParam = params.get('plan') || '';
+      if (planParam) {
+        resolvedPlanId = planParam;
+      }
+
+      // Build return URL with all UTM parameters and dynamic placeholders
+      var returnUrlObj = new URL('https://tooldn-uk.vercel.app/checkout/thank-you.html');
+      
+      // Pass Whop placeholders
+      returnUrlObj.searchParams.set('id', '{id}');
+      returnUrlObj.searchParams.set('email', '{email}');
+      returnUrlObj.searchParams.set('name', '{username}');
+      
+      // Pass our custom parameters
+      var priceVal = params.get('price') || '69.95';
+      returnUrlObj.searchParams.set('price', priceVal);
+      returnUrlObj.searchParams.set('currency', 'GBP');
+      
+      var productVal = params.get('product') || 'DeWalt Brushless Twin Kit';
+      returnUrlObj.searchParams.set('product', productVal);
+
+      // Forward all incoming UTM parameters
+      var utmParamsList = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'xcod', 'sck'];
+      utmParamsList.forEach(function(key) {
+        var val = params.get(key);
+        if (val) {
+          returnUrlObj.searchParams.set(key, val);
+        }
+      });
+
+      resolvedReturnUrl = returnUrlObj.toString();
+    })();
+  </script>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -314,7 +355,9 @@
     <div class="whop-left-block">
       <hr class="section-divider">
       <div class="section-title">Payment</div>
-      <div class="whop-container" data-whop-checkout-plan-id="plan_eJpThCdnLQvGY" data-whop-checkout-theme="light" data-whop-checkout-locale="en" data-whop-checkout-style-container-padding-x="0" data-whop-checkout-style-container-padding-top="0"></div>
+      <script>
+        document.write('<div class="whop-container" data-whop-checkout-plan-id="' + resolvedPlanId + '" data-whop-checkout-return-url="' + resolvedReturnUrl + '" data-whop-checkout-theme="light" data-whop-checkout-locale="en" data-whop-checkout-style-container-padding-x="0" data-whop-checkout-style-container-padding-top="0"></div>');
+      </script>
       <div class="secure-note">
         <svg width="11" height="13" viewBox="0 0 12 14" fill="none"><path d="M6 0L0 2.5V6.5C0 9.8 2.6 12.9 6 14C9.4 12.9 12 9.8 12 6.5V2.5L6 0Z" fill="#ccc"></path></svg>
         Secure and encrypted transaction
@@ -400,7 +443,9 @@
     <div class="whop-right-block">
       <hr class="whop-divider">
       <div class="section-title" style="margin-bottom:14px;">Payment</div>
-      <div class="whop-container" data-whop-checkout-plan-id="plan_eJpThCdnLQvGY" data-whop-checkout-theme="light" data-whop-checkout-locale="en" data-whop-checkout-style-container-padding-x="0" data-whop-checkout-style-container-padding-top="0"></div>
+      <script>
+        document.write('<div class="whop-container" data-whop-checkout-plan-id="' + resolvedPlanId + '" data-whop-checkout-return-url="' + resolvedReturnUrl + '" data-whop-checkout-theme="light" data-whop-checkout-locale="en" data-whop-checkout-style-container-padding-x="0" data-whop-checkout-style-container-padding-top="0"></div>');
+      </script>
       <div class="secure-note">
         <svg width="11" height="13" viewBox="0 0 12 14" fill="none"><path d="M6 0L0 2.5V6.5C0 9.8 2.6 12.9 6 14C9.4 12.9 12 9.8 12 6.5V2.5L6 0Z" fill="#ccc"></path></svg>
         Secure and encrypted transaction
