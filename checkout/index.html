@@ -413,6 +413,22 @@
 </div>
 
 <script>
+  // Remove the inactive Whop container to prevent double iframe mounting & reloading loop
+  (function() {
+    var isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      var desktopBlock = document.querySelector('.whop-right-block');
+      if (desktopBlock) {
+        desktopBlock.parentNode.removeChild(desktopBlock);
+      }
+    } else {
+      var mobileBlock = document.querySelector('.whop-left-block');
+      if (mobileBlock) {
+        mobileBlock.parentNode.removeChild(mobileBlock);
+      }
+    }
+  })();
+
   var regions = {
     US: {
       label: 'State',
